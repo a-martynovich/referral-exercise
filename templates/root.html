@@ -1,0 +1,15 @@
+{% load static %}
+
+<html>
+<head>
+    <title>Page Test</title>
+</head>
+<body>
+    TEST
+    <img src="{% static '/admin/img/icon-alert.svg' %}">
+    <br>
+    DB info: <pre>{{ db_info }}</pre>
+    <br>
+    Env: <pre>{{ env }}</pre>
+</body>
+</html>
