@@ -11,5 +11,11 @@
     DB info: <pre>{{ db_info }}</pre>
     <br>
     Env: <pre>{{ env }}</pre>
+    <br>
+    Refs:
+    <br>
+    {% for r in refs %}
+        <p>{{ r.created }} {{ r.token }}</p>
+    {% endfor %}
 </body>
 </html>
