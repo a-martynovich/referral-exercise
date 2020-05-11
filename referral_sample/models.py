@@ -15,7 +15,7 @@ def random_token():
 
 class Referral(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    token = models.CharField(default=random_token, max_length=512)
+    token = models.CharField(default=random_token, max_length=32, db_index=True)
 
 
 class Profile(models.Model):
