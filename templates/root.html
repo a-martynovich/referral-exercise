@@ -5,21 +5,24 @@
 {% block title %} Main Page {% endblock %}
 
 {% block content %}
-  TEST
-  <br>
-
-  DB info: <pre>{{ db_info }}</pre>
-  <br>
-
-  Env: <pre>{{ env }}</pre>
-  <br>
-
-  Refs:
-  <br>
-  {% for r in refs %}
-    <p>{{ r.created }} {{ r.token }}</p>
-  {% endfor %}
-  <br>
-
-  User: {{ request.user.username }}
+  <main class="login-form">
+    <div class="cotainer">
+      <div class="row justify-content-center">
+          <div class="card bg-light shadow p-3 mb-5 bg-white rounded w-50">
+            <div class="card-body">
+              <h4 class="card-title">Hello {{ request.user.username }}!</h4>
+              <hr>
+              <div class="alert alert-primary" role="alert">
+                Your balance: <b>${{ balance }}</b>
+              </div>
+              <div class="alert alert-secondary" role="alert">
+                Your link:  <input class="w-100" disabled value="{{ referral_link }}">
+              </div>
+              <hr>
+              <a href="{% url 'logout' %}">Log Out</a>
+            </div>
+          </div>
+      </div>
+    </div>
+  </main>
 {% endblock %}
