@@ -1,21 +1,25 @@
+{% extends "base.html" %}
 {% load static %}
+{% load bootstrap4 %}
 
-<html>
-<head>
-    <title>Page Test</title>
-</head>
-<body>
-    TEST
-    <img src="{% static '/admin/img/icon-alert.svg' %}">
-    <br>
-    DB info: <pre>{{ db_info }}</pre>
-    <br>
-    Env: <pre>{{ env }}</pre>
-    <br>
-    Refs:
-    <br>
-    {% for r in refs %}
-        <p>{{ r.created }} {{ r.token }}</p>
-    {% endfor %}
-</body>
-</html>
+{% block title %} Main Page {% endblock %}
+
+{% block content %}
+  TEST
+  <br>
+
+  DB info: <pre>{{ db_info }}</pre>
+  <br>
+
+  Env: <pre>{{ env }}</pre>
+  <br>
+
+  Refs:
+  <br>
+  {% for r in refs %}
+    <p>{{ r.created }} {{ r.token }}</p>
+  {% endfor %}
+  <br>
+
+  User: {{ request.user.username }}
+{% endblock %}

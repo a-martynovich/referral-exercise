@@ -1,10 +1,19 @@
 {% load static %}
+{% load bootstrap4 %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{{ page_title }}{% endblock %}</title>
+  <meta charset="UTF-8">
+  <title>{% block title %}{{ page_title }}{% endblock %}</title>
+
+  {% bootstrap_css %}
+  {% bootstrap_javascript jquery='full' %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+
+  {# Display django.contrib.messages as Bootstrap alerts #}
+  {% bootstrap_messages %}
+  {% block scripts %}{% endblock %}
 </head>
 <body>
 {% block content %}

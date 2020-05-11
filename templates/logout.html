@@ -1,0 +1,18 @@
+{% extends "card_base.html" %}
+{% load bootstrap4 %}
+
+{% block title %} Log Out {% endblock %}
+{% block scripts %}
+  <meta http-equiv = "refresh" content = "2; url = {% url 'root' %}" />
+{% endblock %}
+
+{% block card_content %}
+  <div class="card-body">
+    <div class="alert alert-success" role="alert">
+      <h4 class="alert-heading">Logged out</h4>
+      <p>You've just logged out and will be redirected to the login page.</p>
+      <hr>
+      <p class="mb-0">Hold on for just a second.</p>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+
+{% block content %}
+  <main class="login-form">
+    <div class="cotainer">
+      <div class="row justify-content-center">
+          <div class="col-md-6">
+            <div class="card">
+            {% block card_content %}{% endblock %}
+            </div>
+          </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}
