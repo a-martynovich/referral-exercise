@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.conf import settings
 
@@ -11,6 +10,9 @@ class SignupTests(TestCase):
         pass
 
     def test_signup_simple(self):
+        """
+        Usual workflow: sign up with a good name and password should succeed.
+        """
         response = self.client.post(reverse('signup'), {
             'username': 'user0',
             'password1': 'Password123!',
@@ -24,6 +26,10 @@ class SignupTests(TestCase):
         self.assertEqual(response.context['balance'], 0)
 
     def test_signup_referral(self):
+        """
+        When signing up with a referral link, both the inviter's and invitee's referral status should update.
+        The inviter should increase its people_invited count, and the invitee should get his reward.
+        """
         response = self.client.post(reverse('signup'), {
             'username': 'user0',
             'password1': 'Password123!',
@@ -42,6 +48,9 @@ class SignupTests(TestCase):
         self.assertEqual(p.people_invited, 1)
 
     def test_signup_wrong_referral(self):
+        """
+        Wrong referral link should not lead to failure.
+        """
         response = self.client.post(reverse('signup'), {
             'username': 'user0',
             'password1': 'Password123!',
@@ -60,6 +69,9 @@ class SignupTests(TestCase):
         self.assertEqual(p.people_invited, 0)
 
     def test_invite_reward(self):
+        """
+        When INVITER_TARGET_COUNT new users sign up using inviter's referral link the inviter should get his reward.
+        """
         response = self.client.post(reverse('signup'), {
             'username': 'user',
             'password1': 'Password123!',
@@ -89,6 +101,9 @@ class SignupValidationTests(TestCase):
         self.url = reverse('signup')
 
     def test_weak_pass(self):
+        """
+        Short, common, numeric passwords are invalid.
+        """
         response = self.client.post(self.url, {
             'username': f'user',
             'password1': '123',
@@ -103,6 +118,9 @@ class SignupValidationTests(TestCase):
                           'This password is too common.', 'This password is entirely numeric.']})
 
     def test_username_exists(self):
+        """
+        Signing up with a username which already exists is an error.
+        """
         response = self.client.post(self.url, {
             'username': f'user',
             'password1': 'Password123!',

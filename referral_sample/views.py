@@ -8,6 +8,9 @@ from django.views.generic import TemplateView
 
 
 class AcceptJsonMixin:
+    """
+    A simple mixin providing one method telling whether the request was made with Accept: application/json
+    """
     def is_ajax(self):
         return self.request.META.get('HTTP_ACCEPT') == 'application/json'
 
@@ -21,6 +24,9 @@ class RootView(LoginRequiredMixin, AcceptJsonMixin, TemplateView):
         return ctx
 
     def handle_no_permission(self):
+        """
+        Overridden from LoginRequiredMixin. Returns 401 for an AJAX request if unauthorized.
+        """
         if self.is_ajax():
             return JsonResponse({'error': 'unauthorized'}, status=401)
         return super().handle_no_permission()
@@ -48,6 +54,7 @@ class SignupView(AcceptJsonMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         form = UserCreationForm(request.POST)
         if form.is_valid():
+            # Save the new user, update its referral status, login and redirect to root page.
             new_user = form.save()
             ref = request.GET.get('ref')
             new_user.profile.update_referral(ref)
@@ -68,6 +75,9 @@ class SignInView(AcceptJsonMixin, LoginView):
     template_name = 'login.html'
 
     def form_invalid(self, form):
+        """
+        Overridden from LoginView to return 400 for AJAX requests.
+        """
         response = super().form_invalid(form)
         if self.is_ajax():
             return JsonResponse(form.errors, status=400)
@@ -75,6 +85,9 @@ class SignInView(AcceptJsonMixin, LoginView):
             return response
 
     def form_valid(self, form):
+        """
+        Overridden from LoginView to return empty response for AJAX requests.
+        """
         response = super().form_valid(form)
         if self.is_ajax():
             return JsonResponse({})
