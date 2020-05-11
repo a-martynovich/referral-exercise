@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.urls import reverse
+from django.utils.http import urlencode
 
 
 def random_token():
@@ -23,14 +25,14 @@ class Profile(models.Model):
     balance = models.PositiveIntegerField(default=0)
 
     def update_referral(self, ref_token):
-        ref = Referral.objects.filter(token=ref_token)
         fields = ['referral']
-        if ref.exists():
-            ref = ref.first()
-            self.balance = settings.INVITEE_REWARD
-            ref.profile.reward_inviter()
-            fields.append('balance')
-
+        if ref_token:
+            ref = Referral.objects.filter(token=ref_token)
+            if ref.exists():
+                ref = ref.first()
+                self.balance = settings.INVITEE_REWARD
+                ref.profile.reward_inviter()
+                fields.append('balance')
         self.referral = Referral.objects.create()
         self.save(update_fields=fields)
 
@@ -42,6 +44,10 @@ class Profile(models.Model):
             self.balance += settings.INVITER_REWARD
             fields.append('balance')
         self.save(update_fields=fields)
+
+    @property
+    def referral_url(self):
+        return reverse('signup') + '?' + urlencode({'ref': self.referral.token})
 
 
 @receiver(post_save, sender=User)
